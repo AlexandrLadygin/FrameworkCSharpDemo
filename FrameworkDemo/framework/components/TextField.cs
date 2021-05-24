@@ -25,12 +25,6 @@ namespace FrameworkDemo.framework.components
             Browser.GetInstance().SendKeys(by, text);
         }
 
-        public void Submit()
-        {
-            WaitForElementExists(by);
-            Browser.GetInstance().Submit(by);
-        }
-
         public string GetText => GetAttribute(by, "value");
 
     }

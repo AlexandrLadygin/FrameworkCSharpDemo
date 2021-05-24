@@ -1,4 +1,6 @@
 ﻿using FrameworkDemo.framework.elements;
+using FrameworkDemo.framework.logging;
+using log4net;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Internal;
@@ -17,52 +19,48 @@ namespace FrameworkDemo.framework.browser
         private IWebDriver driver;
         private static readonly string LocatorErrorMessage = "Invalid locator: Locator cannot be null.";
 
-
         private Browser()
         {
-            //сюда добавить инициализацию считываемого значения с консоли (-Dbrowser)
+            //сюда добавить считывание типа браузера с консоли --params:Browser=Chrome
             BrowserType browserType = BrowserType.Chrome;
             driver = WebDriverFactory.GetWorkingDriver(browserType);
+            //log.Debug("Creating instance of WebDriver with ChromeDriver.");
         }
 
         public IWebDriver WrappedDriver => driver;
 
         public static Browser GetInstance()
         {
-            if(instance == null)instance = new Browser();
- 
+            //log.Debug("Getting instance of browser.");
+            if (instance == null)instance = new Browser();
             return instance;
         }
 
-        public static void Stop()
+        public void Stop()
         {
+            //log.Debug("Stopping the browser.");
             if (instance != null) instance.driver.Quit(); 
         }
 
         public void NavigateToUrl(string url)
         {
             if (url == null) throw new ArgumentNullException("Invalid URL: URL cannot be null.");
+            //log.Debug("Navigating to: " + url);
             driver.Navigate().GoToUrl(url);
         }
 
         public void Click(By by)
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
+            //log.Debug("Click on element: " + by);
             IWebElement element = driver.FindElement(by);
             HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
             highlightedWebElement.Click();
         }
 
-        public void ScrollBy(int p1, int p2)
-        {
-            string script = string.Format("window.scrollBy({0}, {1})", p1, p2);
-            IWebDriver driver = Browser.GetInstance().WrappedDriver;
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
-            executor.ExecuteScript("window.scrollBy(0,1000)");
-        }
-
         public void Refresh()
         {
+            //log.Debug("Refresh");
             Browser.GetInstance().WrappedDriver.Navigate().Refresh();
         }
 
@@ -70,23 +68,17 @@ namespace FrameworkDemo.framework.browser
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
             if (text == null) throw new ArgumentNullException("Invalid Text: Text cannot be null.");
+            //log.Debug("Send keys: " + text + " to element: " + by);
             IWebElement element = driver.FindElement(by);
             HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
             highlightedWebElement.SendKeys(text);
 
         }
 
-        public void Submit(By by)
-        {
-            if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
-            IWebElement element = driver.FindElement(by);
-            HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
-            highlightedWebElement.Submit();
-        }
-
         public void Clear(By by)
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
+            //log.Debug("Clearing field: " + by);
             IWebElement element = driver.FindElement(by);
             HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
             highlightedWebElement.Clear();
@@ -95,6 +87,7 @@ namespace FrameworkDemo.framework.browser
         public string GetText(By by)
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
+            //log.Debug("Getting the text of element: " + by);
             IWebElement element = driver.FindElement(by);
             HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
             return highlightedWebElement.Text.Trim();
@@ -110,19 +103,12 @@ namespace FrameworkDemo.framework.browser
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
             if (option == null) throw new ArgumentNullException("Invalid Option: Option cannot be null.");
+            //log.Debug("Selecting option item - " + option);
             Click(by);
             IWebElement element = driver.FindElement(by);
             HighlightedWebElement highlightedWebElement = new HighlightedWebElement(driver, element);
             SelectElement dropDownList = new SelectElement(highlightedWebElement);
             dropDownList.SelectByText(option);
-        }
-
-        public void MoveToElement(By by)
-        {
-            Actions actions = new Actions(WrappedDriver);
-            IWebElement element = WrappedDriver.FindElement(by);
-            actions.MoveToElement(element);
-            actions.Perform();
         }
     }
 }

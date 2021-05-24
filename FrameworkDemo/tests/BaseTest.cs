@@ -1,33 +1,28 @@
 ﻿using FrameworkDemo.framework.browser;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using System;
 using System.Reflection;
 
 namespace FrameworkDemo.tests
 {
-    class BaseTest
+    public class BaseTest
     {
-        protected IWebDriver driver;
-    
-        [SetUp]
-        public void Setup()
-        {
-            driver = Browser.GetInstance().WrappedDriver;
-        }
 
-        [Test]
-        public void BaseTestMethod()
-        {
-            driver.Navigate().GoToUrl("http://google.com/");
-            Console.WriteLine("THE TITLE SHOULD BE......." + driver.Title);
-            Assert.That(driver.Title == "Google");     
-        }
-
+        //[OneTimeTearDown]
+        //public void TakeScreenShot()
+        //{
+        //    if (TestContext.CurrentContext.Result.Outcome != ResultState.Success)
+        //    {
+        //        ITakesScreenshot ssdriver = Browser.GetInstance().WrappedDriver as ITakesScreenshot;
+        //        Screenshot screenshot = ssdriver.GetScreenshot();
+        //        string timestamp = DateTime.Now.ToString("yyyy-MM-dd-hhmm");
+        //        screenshot.SaveAsFile(@"..\..\..\..\framework\screenshots_fail\" + timestamp +
+        //        ".png", ScreenshotImageFormat.Png);
+        //    }
+        //}
         [TearDown]
-        public void TearDown()
-        {
-            driver.Quit();
-        }
+        public void TearDown() => Browser.GetInstance().Stop();
     }
 }
