@@ -16,7 +16,7 @@ namespace FrameworkDemo.framework.utils
             ITakesScreenshot ssdriver = driver as ITakesScreenshot;
             Screenshot screenshot = ssdriver.GetScreenshot();
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss");
-            string path = string.Format(@"Screensot-{0}{1}.png", pathToFolder, timestamp);
+            string path = string.Format(@"{0}{1}.png", pathToFolder, timestamp);
             screenshot.SaveAsFile(path, ScreenshotImageFormat.Png);
         }
     }

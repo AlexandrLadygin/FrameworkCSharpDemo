@@ -21,7 +21,7 @@ namespace FrameworkDemo.tests
             SearchResultPage searchResultPage = homePage.ClickSearchButton();
             var factName = searchResultPage.GetProductName();
             var factPrice = searchResultPage.GetProductPrice();
-            //searchResultPage.ClickAddToCartButton();
+            searchResultPage.ClickAddToCartButton();
             CartPage cartPage = searchResultPage.ClickCartButton();
             var actualName = cartPage.GetProductName(iphoneName);
             var actualPrice = cartPage.GetProductPrice(iphoneName);
