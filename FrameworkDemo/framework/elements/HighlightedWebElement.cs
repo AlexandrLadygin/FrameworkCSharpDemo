@@ -13,7 +13,7 @@ namespace FrameworkDemo.framework.elements
     {
         private readonly IWebDriver driver;
         private readonly IWebElement element;
-        private readonly string BackgroundColor = "#FFBB00";
+        private readonly string BackgroundColor = "#E6399B";
 
         public HighlightedWebElement(IWebDriver driver, IWebElement element)
         {
