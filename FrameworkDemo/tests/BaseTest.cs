@@ -15,10 +15,8 @@ namespace FrameworkDemo.tests
         public void TakeScreenshot()
         {
             if (TestContext.CurrentContext.Result.Outcome != ResultState.Success)
-                FileUtils.TakeScreenshot(@"..\..\..\..\FrameworkDemo\");      
+                FileUtils.TakeScreenshot(@"..\..\..\..\FrameworkDemo\");
+            Browser.GetInstance().WrappedDriver.Quit();
         }
-
-        [OneTimeTearDown]
-        public void TearDown() => Browser.GetInstance().Stop();
     }
 }

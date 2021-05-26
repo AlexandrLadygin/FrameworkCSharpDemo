@@ -1,11 +1,6 @@
-﻿using FrameworkDemo.framework.utils;
-using FrameworkDemo.pages;
+﻿using FrameworkDemo.pages;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FrameworkDemo.tests
 {

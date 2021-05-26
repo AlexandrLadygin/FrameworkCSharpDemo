@@ -1,22 +1,16 @@
 ﻿using FrameworkDemo.framework.elements;
-using FrameworkDemo.framework.logging;
-using log4net;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace FrameworkDemo.framework.browser
 {
     class Browser : IWrapsDriver
     {
-        private static Browser instance;
         private IWebDriver driver;
+        private static ThreadLocal<Browser> instance = new ThreadLocal<Browser>();
         private static readonly string LocatorErrorMessage = "Invalid locator: Locator cannot be null.";
 
         private Browser()
@@ -29,20 +23,27 @@ namespace FrameworkDemo.framework.browser
 
         public IWebDriver WrappedDriver => driver;
 
-        public static Browser GetInstance()
+           public static Browser GetInstance()
         {
             //log.Debug("Getting instance of browser.");
-            if (instance == null)instance = new Browser();
-            return instance;
+            if (instance.Value == null) instance.Value = new Browser();
+            return instance.Value;
         }
 
-        public void Stop()
+        public static void Stop()
         {
             //log.Debug("Stopping the browser.");
-            if (instance != null) instance.driver.Quit(); 
+            try
+            {
+                if (instance != null) instance.Value.WrappedDriver.Quit();
+            }
+            finally
+            {
+                instance.Dispose();
+            }
         }
 
-        public void NavigateToUrl(string url)
+            public void NavigateToUrl(string url)
         {
             if (url == null) throw new ArgumentNullException("Invalid URL: URL cannot be null.");
             //log.Debug("Navigating to: " + url);
@@ -99,6 +100,7 @@ namespace FrameworkDemo.framework.browser
             IWebElement element = driver.FindElement(by);
             return element.Selected;
         }
+
         public void Select(By by, string option)
         {
             if (by == null) throw new ArgumentNullException(LocatorErrorMessage);
@@ -112,4 +114,3 @@ namespace FrameworkDemo.framework.browser
         }
     }
 }
-

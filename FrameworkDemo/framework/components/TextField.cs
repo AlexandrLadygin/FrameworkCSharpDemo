@@ -1,10 +1,6 @@
 ﻿using FrameworkDemo.framework.browser;
 using OpenQA.Selenium;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FrameworkDemo.framework.components
 {
@@ -18,6 +14,7 @@ namespace FrameworkDemo.framework.components
             Browser.GetInstance().Clear(by);
 
         }
+
         public void SendKeys(string text)
         {
             if (text == null) throw new ArgumentNullException("Invalid Text: Text cannot be null.");
@@ -26,6 +23,5 @@ namespace FrameworkDemo.framework.components
         }
 
         public string GetText => GetAttribute(by, "value");
-
     }
 }
